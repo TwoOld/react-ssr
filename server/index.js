@@ -1,4 +1,3 @@
-import React from 'react'
 import { renderToString } from 'react-dom/server'
 import express from 'express'
 import App from '../src/app'
