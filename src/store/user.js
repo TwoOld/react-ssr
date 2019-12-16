@@ -7,7 +7,7 @@ const changeUserInfo = data => ({
 
 export const getUserInfo = server => {
     return (dispatch, getState, axiosInstance) => {
-        return axios.get('/api/user/info')
+        return axios.get('http://localhost:9093/api/user/info')
             .then(res => {
                 const { data } = res.data
                 // console.log('user info', data)
@@ -23,8 +23,6 @@ const defaultState = {
 export default (state = defaultState, action) => {
     switch (action.type) {
         case GET_USER_INFO:
-            console.log('action', action);
-
             const newState = {
                 ...state,
                 userInfo: action.data

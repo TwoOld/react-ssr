@@ -15,7 +15,7 @@ export default [
     {
         path: '/',
         component: Index,
-        // exact: true,
+        exact: true,
         key: 'index'
     },
     {

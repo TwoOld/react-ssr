@@ -7,37 +7,26 @@ import { Provider } from 'react-redux'
 import { getServerStore } from '../src/store/store'
 import Header from '../src/component/Header'
 import axios from 'axios'
+// import 'babel-polyfill'
+const proxy = require('http-proxy-middleware')
+
 
 const app = new express()
 const store = getServerStore()
 app.use(express.static('public'))
 
-app.use('/api', (req, res) => {
-    axios.request({
-        method: req.method,
-        baseURL: 'http://localhost:9090/api',
-        url: req.url,
-        data: req.body
-    }).then(response => res.json(response.data))
-        .catch(err => console.log(err))
-})
+app.use('/api/*', proxy({ target: 'http://localhost:9090', changeOrigin: true }));
+
 app.get('*', (req, res) => {
-    if (req.url === '/favicon.ico') return
+    console.log(req.url);
+
+    if (req.url === '/favicon.ico') return res.send()
     const promises = []
     routes.some(route => {
         const match = matchPath(req.path, route)
         if (match) {
             const { loadData } = route.component
-            promises.push(
-                new Promise(resolve => {
-                    loadData(store)
-                        .then(resolve)
-                        .catch(err => {
-                            console.log(err.response.status);
-                            resolve(err)
-                        })
-                })
-            )
+            promises.push(loadData(store))
         }
     })
     // routes.some(route => {
@@ -46,7 +35,9 @@ app.get('*', (req, res) => {
     //     return match
     // })
     // const Page = <App title="Chiu"></App>
-    Promise.all(promises).then(() => {
+    Promise.all(promises.map(p => p.catch(e => {
+        if (e && e.config) console.error(`请求${e.config.url}出错`);
+    }))).then(() => {
         const content = renderToString(
             <Provider store={store}>
                 <StaticRouter location={req.url}>
