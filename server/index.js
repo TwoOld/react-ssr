@@ -1,7 +1,7 @@
 import React from 'react'
 import { renderToString } from 'react-dom/server'
 import express from 'express'
-import { StaticRouter, matchPath, Route } from 'react-router-dom'
+import { StaticRouter, matchPath, Route, Switch } from 'react-router-dom'
 import routes from '../src/app'
 import { Provider } from 'react-redux'
 import { getServerStore } from '../src/store/store'
@@ -42,14 +42,25 @@ app.get('*', (req, res) => {
     // })));
 
     Promise.all(promises.map(p => p.catch(e => console.log(`${e.config.url}报错了`)))).then(() => {
+        const context = {}
         const content = renderToString(
             <Provider store={store}>
-                <StaticRouter location={req.url}>
+                <StaticRouter location={req.url} context={context}>
                     <Header></Header>
-                    {routes.map(route => <Route {...route}></Route>)}
+                    <Switch>
+                        {routes.map(route => <Route {...route}></Route>)}
+                    </Switch>
                 </StaticRouter>
             </Provider>
         )
+        console.log('context', context);
+
+        if (context.statuscode) {
+            res.status(context.statuscode)
+        }
+        if (context.action === 'REPLACE') {
+            res.redirect(301, context.url)
+        }
         res.send(`
         <html>
             <head>
