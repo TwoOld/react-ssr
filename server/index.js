@@ -20,7 +20,7 @@ app.use('/api', proxy({ target: 'http://localhost:9090', changeOrigin: true }));
 app.get('*', (req, res) => {
     console.log(req.url);
 
-    if (req.url === '/favicon.ico') return res.send()
+    // if (req.url === '/favicon.ico') return res.send()
     const promises = []
     routes.some(route => {
         const match = matchPath(req.path, route)

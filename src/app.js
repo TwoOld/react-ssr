@@ -1,8 +1,9 @@
-import React, { useState } from 'react'
-import { Route } from 'react-router-dom'
+// import React, { useState } from 'react'
+// import { Route } from 'react-router-dom'
 import Index from './container/Index'
 import About from './container/About'
 import User from './container/User'
+import './app.css'
 
 // export default (
 //     <div>
