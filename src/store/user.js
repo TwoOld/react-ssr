@@ -1,4 +1,4 @@
-import axios from 'axios'
+// import axios from 'axios'
 const GET_USER_INFO = 'INDEX/USER_INFO'
 const changeUserInfo = data => ({
     type: GET_USER_INFO,
@@ -6,8 +6,8 @@ const changeUserInfo = data => ({
 })
 
 export const getUserInfo = server => {
-    return (dispatch, getState, axiosInstance) => {
-        return axios.get('http://localhost:9093/api/user/info')
+    return (dispatch, getState, $axios) => {
+        return $axios.get('/api/user/info')
             .then(res => {
                 const { data } = res.data
                 // console.log('user info', data)

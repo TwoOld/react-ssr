@@ -15,7 +15,7 @@ const app = new express()
 const store = getServerStore()
 app.use(express.static('public'))
 
-app.use('/api/*', proxy({ target: 'http://localhost:9090', changeOrigin: true }));
+app.use('/api', proxy({ target: 'http://localhost:9090', changeOrigin: true }));
 
 app.get('*', (req, res) => {
     console.log(req.url);
@@ -26,7 +26,9 @@ app.get('*', (req, res) => {
         const match = matchPath(req.path, route)
         if (match) {
             const { loadData } = route.component
-            promises.push(loadData(store))
+            if (loadData) {
+                promises.push(loadData(store))
+            }
         }
     })
     // routes.some(route => {
@@ -35,9 +37,11 @@ app.get('*', (req, res) => {
     //     return match
     // })
     // const Page = <App title="Chiu"></App>
-    Promise.all(promises.map(p => p.catch(e => {
-        if (e && e.config) console.error(`请求${e.config.url}出错`);
-    }))).then(() => {
+    // console.log('promise', promises.map(p => p.catch(e => {
+    //     if (e && e.config) console.error(`请求${e.config.url}出错`);
+    // })));
+
+    Promise.all(promises.map(p => p.catch(e => console.log(`${e.config.url}报错了`)))).then(() => {
         const content = renderToString(
             <Provider store={store}>
                 <StaticRouter location={req.url}>

@@ -5,5 +5,5 @@ function About(props) {
         <h1>About</h1>
     </div>
 }
-About.loadData = () => { }
+// About.loadData = () => { }
 export default About
