@@ -1,8 +1,8 @@
 # React SSR
 
-## SSR vs CSR
+**SSR vs CSR**
 
-**客户端渲染(Client Side Render), 简称 CSR**, 服务端返回 html 的 body 中只会包括 id 为 root 的标签，依靠引入的 script 中的代码进行控制渲染后，浏览器进行渲染。
+**客户端渲染(Client Side Render), 简称 CSR**, 服务端返回 html 的 body 中只会包括 id 为 root 的标签，依靠拉取 script 中的代码进行控制渲染后，浏览器进行渲染。
 
 **服务端渲染(Server Side Render), 简称 SSR**, 服务端返回 html 包含完整的结构，浏览器直接渲染。
 
