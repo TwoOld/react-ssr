@@ -4,7 +4,7 @@ import Index from './container/Index'
 import About from './container/About'
 import User from './container/User'
 import NotFound from './container/NotFound'
-import './app.css'
+// import './app.css'
 
 // export default (
 //     <div>
