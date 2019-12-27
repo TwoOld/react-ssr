@@ -8,6 +8,7 @@ import { getServerStore } from '../src/store/store'
 import Header from '../src/component/Header'
 import path from 'path'
 import fs from 'fs'
+import config from './config'
 const proxy = require('http-proxy-middleware')
 
 
@@ -28,7 +29,7 @@ app.get('*', (req, res) => {
 
     // 配置开关开启csr
     // 服务器负载过高开启csr
-    if (req.query._mode === 'csr') {
+    if (req.query._mode === 'csr' || config.csr) {
         return csr(res)
     }
 
@@ -67,7 +68,6 @@ app.get('*', (req, res) => {
                 </StaticRouter>
             </Provider>
         )
-        console.log('context', context);
 
         if (context.statuscode) {
             res.status(context.statuscode)
